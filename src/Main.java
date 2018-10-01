@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<Action> actions = new ArrayList<Action>();
         ArrayList<Observation> observations = new ArrayList<Observation>();
-        final long normalizingConstant = 1/9; // todo check!!
+        final double normalizingConstant = 1/9; // todo check!!
         // TODO Starting state initializer flag
 
         // Set Up Board (default settings of 1/9 for each belief state, except terminal states):
@@ -49,7 +49,9 @@ public class Main {
 
         // Testing...
 
+        // TODO LOOP THROUGH EVERY STATE ...
         beliefState.calculateBeliefState("(1,1)", actions.get(0), observations.get(0));
+
         System.out.println(actions);
         System.out.println(observations);
     }
