@@ -1,15 +1,15 @@
 public class Tile {
     private int x;
     private int y;
-    private int belief;
+    private double belief;
 
-    public Tile(int x, int y, int belief) {
+    public Tile(int x, int y, double belief) {
         this.x = x;
         this.y = y;
         this.belief = belief;
     }
 
-    public void setBelief(int newBelief) {
+    public void setBelief(double newBelief) {
         this.belief = newBelief;
     }
 
