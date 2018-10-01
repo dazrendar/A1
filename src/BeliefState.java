@@ -40,15 +40,15 @@ public class BeliefState {
                                                   Observation e, double normalizingConstant) {
         // uses current belief state
         // TODO IMPORTANT! Remember: only update the relevent surrounding states: ie., which states COULD end up in stateXY, given the current action
-            // so... Do i calculate based on coords, or do I hard code cases?
-            //also, where does the observation e come in?
+        // so... Do i calculate based on coords, or do I hard code cases?
+        //also, where does the observation e come in?
         // todo need transition probabilities?
 
         State destinationState = beliefState.get(stateXY);
         destinationState.printState();
 
         // Loop through all states
-        for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
+        for (HashMap.Entry<String, State> entry : beliefState.entrySet()) {
             String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
             State sourceState = entry.getValue(); // the details of the state
             ArrayList<Action> destWalls = destinationState.getWalls();
@@ -67,10 +67,6 @@ public class BeliefState {
 
 
             double sum = 0;
-            double probFromBelow = 0;
-            double probFromAbove = 0;
-            double probFromLeft = 0;
-            double probFromRight = 0;
 
             if (!sourceWalls.contains(Action.TERMINATE)) {
                 switch (action) {
@@ -81,17 +77,16 @@ public class BeliefState {
                                 !destWalls.contains(Action.UP) &&
                                 !destWalls.contains(Action.RIGHT)) {
                             if (sourceX == destX && sourceY == destY) {
-
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
-                            } else if (sourceX == destX+1 && sourceY == destY) {
-
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                            if (sourceX == destX + 1 && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
-                            } else if (sourceX == destX && sourceY == destY-1) {
-
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                            if (sourceX == destX && sourceY == destY - 1) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.8) * sourceState.getBelief();
                             }
 
                         }
@@ -100,13 +95,16 @@ public class BeliefState {
                                 !destWalls.contains(Action.RIGHT)) {
                             if (sourceX == destX && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.8) * sourceState.getBelief();
                             } else if (sourceX == destX && sourceY == destY - 1) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                            } else if (sourceX == destX-1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                            } else if (sourceX == destX+1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                sum += (0.1) * sourceState.getBelief();
                             }
                         }
                         if (!destWalls.contains(Action.LEFT) &&
@@ -114,13 +112,13 @@ public class BeliefState {
                                 destWalls.contains(Action.RIGHT)) {
                             if (sourceX == destX && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
-                            } else if (sourceX == destX && sourceY == destY-1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
-                            } else if (sourceX == destX-1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.1) * sourceState.getBelief();
                             }
 
                         }
@@ -129,51 +127,236 @@ public class BeliefState {
                                 !destWalls.contains(Action.RIGHT)) {
                             if (sourceX == destX && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.8) * sourceState.getBelief();
                             } else if (sourceX == destX && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.8) * sourceState.getBelief();
                             } else if (sourceX == destX && sourceY == destY) {
                                 System.out.println("SOURCE: " + sourceX + "," + sourceY);
-                                // TODO
+                                sum += (0.8) * sourceState.getBelief();
                             }
                         }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT)) {
+                            if (sourceX == destX + 1 && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        break;
                     case DOWN:
-                        // todo
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                destWalls.contains(Action.RIGHT) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.8) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
                         break;
                     case LEFT:
-                        // todo
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+
+                        if (destWalls.contains(Action.LEFT) &&
+                                destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+
+                        if (!destWalls.contains(Action.LEFT) &&
+                                destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX + 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            }
+
+                        }
+
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
                         break;
                     case RIGHT:
-                        // todo
+                        if (destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+
+                        }
+                        if (!destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.RIGHT) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.RIGHT) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
+                        if (!destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT) &&
+                                !destWalls.contains(Action.DOWN)) {
+                            if (sourceX == destX - 1 && sourceY == destY) {
+                                sum += (0.8) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY + 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                sum += (0.1) * sourceState.getBelief();
+                            }
+                        }
                         break;
                 }
-
-                sum = probFromAbove + probFromBelow + probFromLeft + probFromRight;
             }
 
-
         }
 
-
-        // todo.. loop here or outside?
-
-        ArrayList<State> states = new ArrayList<State>();
-
-        for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
-            // eg. b`(1,1)
-
-            // sum
-//            String key = entry.getKey(); // the name of the state (e.g., "AA")
-//            State state = entry.getValue(); // the details of the state
-//            state.printState();
-//            state.getBelief()*
-//            state.setBelief();
-
-            states.add(destinationState);
-
-        }
-        BeliefState newBeliefState;
-        return null; //todo FIX
+    return null;
     }
 }
+//
+//
+//        // todo.. loop here or outside?
+//
+//        ArrayList<State> states = new ArrayList<State>();
+//
+////        for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
+////            // eg. b`(1,1)
+////
+////            // sum
+//////            String key = entry.getKey(); // the name of the state (e.g., "AA")
+//////            State state = entry.getValue(); // the details of the state
+//////            state.printState();
+//////            state.getBelief()*
+//////            state.setBelief();
+////
+////            states.add(destinationState);
+//
+//        }
+//        BeliefState newBeliefState;
+//        return null; //todo FIX
+//    }
+
