@@ -1,21 +1,17 @@
+import java.util.ArrayList;
+
 public class State {
     private int x;
     private int y;
     private double belief;
-    private int numberOfWalls;
+    private ArrayList<Action> walls;
+//    private int numberOfWalls;
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @param belief
-     * @param numberOfWalls number of walls adjacent to this location "square". 0 means terminal state
-     */
-    public State(int x, int y, double belief, int numberOfWalls) {
+    public State(int x, int y, double belief, ArrayList<Action> walls) {
         this.x = x;
         this.y = y;
         this.belief = belief;
-        this.numberOfWalls = numberOfWalls;
+        this.walls = walls;
 
     }
 
@@ -31,9 +27,10 @@ public class State {
         return belief;
     }
 
-    public int getNumberOfWalls() {
-        return numberOfWalls;
+    public ArrayList<Action> getWalls() {
+        return walls;
     }
+
 // TODO something with the number of walls
 
     public void setBelief(double newBelief) {
@@ -41,7 +38,7 @@ public class State {
     }
 
     public void printState() {
-        System.out.println("State (" + x + "," + y + "); belief = " + belief + "; #walls = " + numberOfWalls);
+        System.out.println("State (" + x + "," + y + "); belief = " + belief + "; #walls = " + walls);
 
     }
 }

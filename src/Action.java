@@ -1,3 +1,3 @@
 public enum Action {
-        LEFT, RIGHT, UP, DOWN
+        LEFT, RIGHT, UP, DOWN, TERMINATE
     }
