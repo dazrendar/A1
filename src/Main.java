@@ -1,29 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Main {
 
-    public enum action {
-        LEFT, RIGHT, UP, DOWN
-    }
-
-    public enum observation {
-        ZERO_WALLS, ONE_WALL, TWO_WALLS
-    }
-
-    public HashMap<String, State> calculateBelief(HashMap<String, State> beliefState) {
-        for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
-            String key = entry.getKey(); // the name of the state (e.g., "AA")
-            State value = entry.getValue(); // the details of the state
-            value.printState();
-        }
-        return beliefState;
-    }
-
     public static void main(String[] args) {
-        ArrayList<action> actions = new ArrayList<action>();
-        ArrayList<observation> observations = new ArrayList<observation>();
+        ArrayList<Action> actions = new ArrayList<Action>();
+        ArrayList<Observation> observations = new ArrayList<Observation>();
         final long normalizingConstant = 1/9; // todo check!!
         // TODO Starting state initializer flag
 
@@ -44,21 +26,6 @@ public class Main {
         State DC = new State(4,3,0, 0 ); // Terminal State
 
         // Combine all states into Belief State
-//        HashMap<String, State> beliefState = new HashMap<String, State>();
-//        beliefState.put("AA", AA);
-//        beliefState.put("BA", BA);
-//        beliefState.put("CA", CA);
-//        beliefState.put("DA", DA);
-//
-//        beliefState.put("AB", AB);
-//        beliefState.put("CB", CB);
-//        beliefState.put("DB", DB);
-//
-//        beliefState.put("AC", AC);
-//        beliefState.put("BC", BC);
-//        beliefState.put("CC", CC);
-//        beliefState.put("DC", DC);
-
         ArrayList<State> states = new ArrayList<State>(Arrays.asList(AA,BA,CA,DA,AB,CB,DB,AC,BC,CC,DC));
         BeliefState beliefState = new BeliefState(states);
 
@@ -68,24 +35,21 @@ public class Main {
 
 
 
-
-        // Actions to input
+        // ************** Actions to input ***************
         // TODO make as actual inputs
-        actions.add(action.UP);
-        actions.add(action.UP);
-        actions.add(action.UP);
+        actions.add(Action.UP);
+        actions.add(Action.UP);
+        actions.add(Action.UP);
 
         // Observations to input
-        observations.add(observation.TWO_WALLS);
-        observations.add(observation.TWO_WALLS);
-        observations.add(observation.TWO_WALLS);
+        observations.add(Observation.TWO_WALLS);
+        observations.add(Observation.TWO_WALLS);
+        observations.add(Observation.TWO_WALLS);
+        // ***********************************************
 
         // Testing...
-        for(HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
-            String key = entry.getKey(); // the name of the state (e.g., "AA")
-            State value = entry.getValue(); // the details of the state
-            value.printState();
-        }
+
+        beliefState.calculateBeliefState("(1,1)", actions.get(0), observations.get(0));
         System.out.println(actions);
         System.out.println(observations);
     }
