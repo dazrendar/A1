@@ -64,7 +64,7 @@ public class Main {
         // Testing...
 
         // TODO LOOP THROUGH EVERY STATE ...
-        beliefState.calculateBeliefStateForOne("(1,2)", actions.get(0), observations.get(0), normalizingConstant);
+        beliefState.calculateBeliefStateForOne("(3,3)", actions.get(0), observations.get(0), normalizingConstant);
 
         System.out.println(actions);
         System.out.println(observations);

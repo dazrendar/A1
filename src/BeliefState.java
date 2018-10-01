@@ -47,74 +47,114 @@ public class BeliefState {
         State destinationState = beliefState.get(stateXY);
         destinationState.printState();
 
-        // grab coordinates of destination tile
-        int destX = destinationState.getX();
-        int destY = destinationState.getY();
-
-        double sum = 0;
-        double probFromBelow = 0;
-        double probFromAbove = 0;
-        double probFromLeft = 0;
-        double probFromRight = 0;
-
         // Loop through all states
         for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
             String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
-            State currentState = entry.getValue(); // the details of the state
-            int currX = currentState.getX();
-            int currY = currentState.getY();
+            State sourceState = entry.getValue(); // the details of the state
+            ArrayList<Action> destWalls = destinationState.getWalls();
+            ArrayList<Action> sourceWalls = sourceState.getWalls();
+            System.out.println("currXY = " + currKeyXY + " destWalls = " + destWalls);
 
-            //            currentState.printState();
+            // grab coordinates of destination tile
+            int destX = destinationState.getX();
+            int destY = destinationState.getY();
+            int sourceX = sourceState.getX();
+            int sourceY = sourceState.getY();
 
 
-            // check if state neighbours destinationState
-            boolean isNextToX = Math.abs(currX - destX) <= 1;
-            boolean isNextToY = Math.abs(currY - destY) <= 1;
-            System.out.println("nexttoX = " +isNextToX);
-            System.out.println("nexttoY = " +isNextToY);
+//            System.out.println("SOURCE: " + sourceX + "," + sourceY);
+//            System.out.println("DEST: " + destX + "," + destY);
 
-            // XOR
-            if (isNextToX ^ isNextToY) {
-                System.out.println("YES!! " + currKeyXY);
+
+            double sum = 0;
+            double probFromBelow = 0;
+            double probFromAbove = 0;
+            double probFromLeft = 0;
+            double probFromRight = 0;
+
+            if (!sourceWalls.contains(Action.TERMINATE)) {
+                switch (action) {
+                    case UP:
+                        // P((x,y) | (x+_,y+_),action) * b(x+_,y+_)
+                        // check if there is a tile oriented below in the BELIEF STATE
+                        if (destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT)) {
+                            if (sourceX == destX && sourceY == destY) {
+
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX+1 && sourceY == destY) {
+
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX && sourceY == destY-1) {
+
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            }
+
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX && sourceY == destY - 1) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                            } else if (sourceX == destX-1 && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                            } else if (sourceX == destX+1 && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                            }
+                        }
+                        if (!destWalls.contains(Action.LEFT) &&
+                                !destWalls.contains(Action.UP) &&
+                                destWalls.contains(Action.RIGHT)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX && sourceY == destY-1) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX-1 && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            }
+
+                        }
+                        if (destWalls.contains(Action.LEFT) &&
+                                destWalls.contains(Action.UP) &&
+                                !destWalls.contains(Action.RIGHT)) {
+                            if (sourceX == destX && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            } else if (sourceX == destX && sourceY == destY) {
+                                System.out.println("SOURCE: " + sourceX + "," + sourceY);
+                                // TODO
+                            }
+                        }
+                    case DOWN:
+                        // todo
+                        break;
+                    case LEFT:
+                        // todo
+                        break;
+                    case RIGHT:
+                        // todo
+                        break;
+                }
+
+                sum = probFromAbove + probFromBelow + probFromLeft + probFromRight;
             }
+
+
         }
 
-        switch(action) {
-            case UP:
-                // P((x,y) | (x+_,y+_),action) * b(x+_,y+_)
-                // check if there is a tile oriented below in the BELIEF STATE
-                if (destX - 1 > 0) {
-                    // then there is a tile below
-                    probFromBelow = (0.8) * destinationState.getBelief();
-                }
-
-                // then there is a tile above
-                if (destX + 1 <= 3) {
-                    probFromAbove = (0.1) * destinationState.getBelief();
-                }
-
-                // then there is a tile to the left
-                if (destY - 1 > 0) {
-                    probFromLeft = (0.1) * destinationState.getBelief();
-                }
-
-                // then there is a tile to the right
-                if (destY + 1 <= 4) {
-                    probFromRight = (0.1) * destinationState.getBelief();
-                }
-                break;
-            case DOWN:
-                // todo
-                break;
-            case LEFT:
-                // todo
-                break;
-            case RIGHT:
-                // todo
-                break;
-        }
-
-        sum = probFromAbove + probFromBelow + probFromLeft + probFromRight;
 
         // todo.. loop here or outside?
 
