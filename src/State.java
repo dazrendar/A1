@@ -4,6 +4,13 @@ public class State {
     private double belief;
     private int numberOfWalls;
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param belief
+     * @param numberOfWalls number of walls adjacent to this location "square". 0 means terminal state
+     */
     public State(int x, int y, double belief, int numberOfWalls) {
         this.x = x;
         this.y = y;

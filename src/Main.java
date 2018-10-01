@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -31,6 +32,23 @@ public class Main {
         State CC = new State(3,3,(float) 1/9, 1);
         State DC = new State(4,3,0, 0 ); // Terminal State
 
+        // Combine all states into Belief State
+        HashMap<String, State> beliefState = new HashMap<String, State>();
+        beliefState.put("AA", AA);
+        beliefState.put("BA", BA);
+        beliefState.put("CA", CA);
+        beliefState.put("DA", DA);
+
+        beliefState.put("AB", AB);
+        beliefState.put("CB", CB);
+        beliefState.put("DB", DB);
+
+        beliefState.put("AC", AC);
+        beliefState.put("BC", BC);
+        beliefState.put("CC", CC);
+        beliefState.put("DC", DC);
+
+
         // Readjust belief state when starting state is specified
         // TODO
 
@@ -50,7 +68,11 @@ public class Main {
 
 
         // Testing...
-        AA.printState();
+        for(HashMap.Entry<String, State> entry : beliefState.entrySet()) {
+            String key = entry.getKey(); // the name of the state (e.g., "AA")
+            State value = entry.getValue(); // the details of the state
+            value.printState();
+        }
         System.out.println(actions);
         System.out.println(observations);
     }
