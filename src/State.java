@@ -19,7 +19,22 @@ public class State {
 
     }
 
-    // TODO something with the number of walls
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public double getBelief() {
+        return belief;
+    }
+
+    public int getNumberOfWalls() {
+        return numberOfWalls;
+    }
+// TODO something with the number of walls
 
     public void setBelief(double newBelief) {
         this.belief = newBelief;
