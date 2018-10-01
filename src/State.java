@@ -1,9 +1,9 @@
-public class Tile {
+public class State {
     private int x;
     private int y;
     private double belief;
 
-    public Tile(int x, int y, double belief) {
+    public State(int x, int y, double belief) {
         this.x = x;
         this.y = y;
         this.belief = belief;
@@ -14,7 +14,7 @@ public class Tile {
     }
 
     public void printTile() {
-        System.out.println("Tile (" + x + "," + y + "); belief = " + belief);
+        System.out.println("State (" + x + "," + y + "); belief = " + belief);
 
     }
 }
