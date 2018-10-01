@@ -5,8 +5,14 @@ public class Main {
     public enum action {
         LEFT, RIGHT, UP, DOWN
     }
+
+    public enum observation {
+        ZERO_WALLS, ONE_WALL, TWO_WALLS
+    }
+
     public static void main(String[] args) {
         ArrayList<action> actions = new ArrayList<action>();
+        ArrayList<observation> observations = new ArrayList<observation>();
 
         // Set Up Board (default settings of 1/9 for each belief state, except terminal states):
         State AA = new State(1,1,(float) 1/9);
@@ -29,10 +35,16 @@ public class Main {
         actions.add(action.UP);
         actions.add(action.UP);
 
+        // Observations to input
+        observations.add(observation.TWO_WALLS);
+        observations.add(observation.TWO_WALLS);
+        observations.add(observation.TWO_WALLS);
 
 
 
         // Testing...
-        AA.printTile();
+        AA.printState();
+        System.out.println(actions);
+        System.out.println(observations);
     }
 }

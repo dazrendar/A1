@@ -13,7 +13,7 @@ public class State {
         this.belief = newBelief;
     }
 
-    public void printTile() {
+    public void printState() {
         System.out.println("State (" + x + "," + y + "); belief = " + belief);
 
     }
