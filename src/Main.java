@@ -7,7 +7,6 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<Action> actions = new ArrayList<Action>();
         ArrayList<Integer> observations = new ArrayList<Integer>();
-        final double normalizingConstant = 1/9; // todo check!!
         // TODO Starting state initializer flag
 
         // Set Up Board (default settings of 1/9 for each belief state, except terminal states):
@@ -67,56 +66,84 @@ public class Main {
         // TODO LOOP THROUGH EVERY STATE ...
 
 //
-//        double currentSum = beliefState.calculateBeliefStateForOne("(4,2)", Action.LEFT);
+//        double currentSum = beliefState.calculateBeliefStateForOne("(2,2)", Action.LEFT);
 //        System.out.println("CURRENT = " + currentSum);
+        for (int i = 0; i < actions.size(); i++) {
+            Action currentAction = actions.get(i);
+            int currentObservation = observations.get(i);
 
-        double sumToNormalize = 0;
-        Action currentAction = Action.DOWN; // todo remove hard coding
-        int currentObservation = observations.get(0); // todo remove hard coding
+            HashMap<String, Double> newValues = new HashMap<String, Double>();
 
-        HashMap<String, Double> newValues = new HashMap<String, Double>();
+            for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
+                String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
+                State currDestState = entry.getValue(); // the details of the state
+                System.out.println("STARTING ****** " + currKeyXY);
 
+                double currentSum = beliefState.calculateBeliefStateForOne(currKeyXY, currentAction);
+
+                // double result =  currentSum;
+                System.out.println("CURRENT = " + currentSum);
+
+                // get walls
+                double probabilityOfEvidence = 1;
+                if (!currDestState.getWalls().contains(Action.TERMINATE)) {
+                    if (currDestState.getWalls().size() == currentObservation) {
+                        probabilityOfEvidence = 0.9;
+                    } else {
+                        probabilityOfEvidence = 0.1;
+                    }
+                } else {
+                    // we are in a terminate state:
+                    if (currDestState.getWalls().size() - 1 == currentObservation) {
+                        probabilityOfEvidence = 0.9;
+                    } else {
+                        probabilityOfEvidence = 0.1;
+                    }
+                }
+
+                currentSum = probabilityOfEvidence * currentSum; // still need to apply normalization
+                newValues.put(currKeyXY, currentSum);
+            }
+
+            System.out.println(newValues);
+            System.out.println(newValues.size());
+            // todo: sum of all the sums
+
+            double summationForNormalization = 0;
+
+            for (HashMap.Entry<String, Double> entry : newValues.entrySet()) {
+                String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
+                Double currStateValue = entry.getValue(); // the details of the state
+
+                summationForNormalization += currStateValue;
+
+
+            }
+
+            System.out.println(summationForNormalization);
+
+
+            for (HashMap.Entry<String, Double> entry : newValues.entrySet()) {
+                String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
+                Double currStateValue = entry.getValue(); // the details of the state
+
+                // apply normalization
+                double finalBeliefValue = currStateValue / summationForNormalization;
+
+                // add to belief state
+                beliefState.getBeliefState().get(currKeyXY).setBelief(finalBeliefValue);
+
+            }
+        }
+
+        // FINAL OUTPUT printing
+        System.out.println("Final Output:");
         for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
             String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
             State currDestState = entry.getValue(); // the details of the state
-
-            double currentSum = beliefState.calculateBeliefStateForOne(currKeyXY, currentAction);
-//            double result =  currentSum;
-            System.out.println("CURRENT = " + currentSum);
-
-//             todo: apply P(e|s`)
-//             get walls
-            double probabilityOfEvidence = 1;
-            if (!currDestState.getWalls().contains(Action.TERMINATE)) {
-                if (currDestState.getWalls().size() == currentObservation) {
-                    probabilityOfEvidence = 0.9;
-                } else {
-                    probabilityOfEvidence = 0.1;
-                }
-            } else {
-                // we are in a terminate state:
-                if (currDestState.getWalls().size() -1 == currentObservation) {
-                    probabilityOfEvidence = 0.9;
-                } else {
-                    probabilityOfEvidence = 0.1;
-                }
-            }
-
-            currentSum = probabilityOfEvidence * currentSum; // still need to apply normalization
-            newValues.put(currKeyXY, currentSum);
+            currDestState.printStateFinal();
         }
-
-        System.out.println(newValues);
-        // todo: sum of all the sums
-
-        // todo: calculate normalizgin const
-
-        // todo: apply normalizign const
-
-        // todo input into new belief state..
-
-
-
+        // todo surround ^ in loop to accound for list of action / observations
     }
 
 

@@ -41,4 +41,8 @@ public class State {
         System.out.println("State (" + x + "," + y + "); belief = " + belief + "; #walls = " + walls);
 
     }
+    public void printStateFinal() {
+        System.out.println("State (" + x + "," + y + "); belief = " + belief);
+
+    }
 }
