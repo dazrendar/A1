@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<Action> actions = new ArrayList<Action>();
         ArrayList<Integer> observations = new ArrayList<Integer>();
-        // TODO Starting state initializer flag
+        String startingStateXY = ""; // empty string if we don't want to specify a starting state.
 
         // Set Up Board (default settings of 1/9 for each belief state, except terminal states):
         ArrayList<Action> AAWalls = new ArrayList<Action>(Arrays.asList(Action.LEFT, Action.DOWN));
@@ -44,29 +44,46 @@ public class Main {
         BeliefState beliefState = new BeliefState(states);
 
 
-        // Readjust belief state when starting state is specified
+
+
         // TODO: eg, if starting state == AA -> AA.setBelief(1); , set all others to 0
 
 
 
         // ************** Actions to input ***************
         // TODO make as actual inputs
-        actions.add(Action.UP);
-        actions.add(Action.UP);
+        actions.add(Action.RIGHT);
+        actions.add(Action.RIGHT);
         actions.add(Action.UP);
 
         // Observations to input
-        observations.add(2);
-        observations.add(2);
-        observations.add(2);
+        observations.add(1);
+        observations.add(1);
+        observations.add(0);
+
+        // Starting State
+        startingStateXY = "(2,3)"; // use only to set a starting state.
+
         // ***********************************************
 
-        // Testing...
+        // Readjust belief state when starting state is specified
+        if (!startingStateXY.isEmpty()) {
+            System.out.println("Setting starting state to: " + startingStateXY);
+            for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
+                String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
+                State currDestState = entry.getValue(); // the details of the state
+                if (currKeyXY.equals(startingStateXY)) {
+                    beliefState.getBeliefState().get(currKeyXY).setBelief(1);
+                } else {
+                    beliefState.getBeliefState().get(currKeyXY).setBelief(0);
+                }
+            }
+        }
 
         // TODO LOOP THROUGH EVERY STATE ...
 
 //
-//        double currentSum = beliefState.calculateBeliefStateForOne("(2,2)", Action.LEFT);
+//        double currentSum = beliefState.calculateSummationForOneState("(2,2)", Action.LEFT);
 //        System.out.println("CURRENT = " + currentSum);
         for (int i = 0; i < actions.size(); i++) {
             Action currentAction = actions.get(i);
@@ -79,14 +96,18 @@ public class Main {
                 State currDestState = entry.getValue(); // the details of the state
                 System.out.println("STARTING ****** " + currKeyXY);
 
-                double currentSum = beliefState.calculateBeliefStateForOne(currKeyXY, currentAction);
+                double currentSum = beliefState.calculateSummationForOneState(currKeyXY, currentAction);
 
                 // double result =  currentSum;
                 System.out.println("CURRENT = " + currentSum);
 
                 // get walls
                 double probabilityOfEvidence = 1;
-                if (!currDestState.getWalls().contains(Action.TERMINATE)) {
+
+                // case for observing terminal state
+                if (currentObservation == 0) {
+                    probabilityOfEvidence = 0.1;
+                } else if (!currDestState.getWalls().contains(Action.TERMINATE)) {
                     if (currDestState.getWalls().size() == currentObservation) {
                         probabilityOfEvidence = 0.9;
                     } else {
@@ -116,8 +137,6 @@ public class Main {
                 Double currStateValue = entry.getValue(); // the details of the state
 
                 summationForNormalization += currStateValue;
-
-
             }
 
             System.out.println(summationForNormalization);
@@ -134,12 +153,16 @@ public class Main {
                 beliefState.getBeliefState().get(currKeyXY).setBelief(finalBeliefValue);
 
             }
+            System.out.println("Belief State at step: " + i+1);
+            for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
+                State currDestState = entry.getValue(); // the details of the state
+                currDestState.printStateFinal();
+            }
         }
 
         // FINAL OUTPUT printing
         System.out.println("Final Output:");
         for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
-            String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
             State currDestState = entry.getValue(); // the details of the state
             currDestState.printStateFinal();
         }
