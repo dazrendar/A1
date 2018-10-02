@@ -44,31 +44,70 @@ public class Main {
         BeliefState beliefState = new BeliefState(states);
 
 
-
-
-        // TODO: eg, if starting state == AA -> AA.setBelief(1); , set all others to 0
-
-
-
-        // ************** Actions to input ***************
-        // TODO make as actual inputs
-        actions.add(Action.RIGHT);
-        actions.add(Action.RIGHT);
+//        // ************** Actions to input ***************
+        actions.add(Action.UP);
+        actions.add(Action.UP);
         actions.add(Action.UP);
 
         // Observations to input
-        observations.add(1);
-        observations.add(1);
-        observations.add(0);
+        observations.add(2);
+        observations.add(2);
+        observations.add(2);
 
-        // Starting State
-        startingStateXY = "(2,3)"; // use only to set a starting state.
+//         Starting State
+//        startingStateXY = "(2,3)"; // use only to set a starting state.
 
-        // ***********************************************
+//        // ************** Actions to input ***************
+//        actions.add(Action.UP);
+//        actions.add(Action.UP);
+//        actions.add(Action.UP);
+//
+//        // Observations to input
+//        observations.add(1);
+//        observations.add(1);
+//        observations.add(1);
+
+//         Starting State
+//        startingStateXY = "(2,3)"; // use only to set a starting state.
+
+//        // ************** Actions to input ***************
+//        actions.add(Action.RIGHT);
+//        actions.add(Action.RIGHT);
+//        actions.add(Action.UP);
+//
+//        // Observations to input
+//        observations.add(1);
+//        observations.add(1);
+//        observations.add(0);
+//
+//        // Starting State
+//        startingStateXY = "(2,3)"; // use only to set a starting state.
+
+//        // ************** Actions to input ***************
+//        actions.add(Action.UP);
+//        actions.add(Action.RIGHT);
+//        actions.add(Action.RIGHT);
+//        actions.add(Action.RIGHT);
+//
+//        // Observations to input
+//        observations.add(2);
+//        observations.add(2);
+//        observations.add(1);
+//        observations.add(1);
+//
+//        // Starting State
+//        startingStateXY = "(1,1)"; // use only to set a starting state.
+
+//        // ***********************************************
+
+        System.out.println("Actions = " + actions + " ; Observations = " + observations);
+        if (!startingStateXY.isEmpty()) {
+            System.out.println("Starting State = " + startingStateXY);
+        }
 
         // Readjust belief state when starting state is specified
         if (!startingStateXY.isEmpty()) {
-            System.out.println("Setting starting state to: " + startingStateXY);
+//            System.out.println("Setting starting state to: " + startingStateXY);
             for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
                 String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
                 State currDestState = entry.getValue(); // the details of the state
@@ -80,11 +119,6 @@ public class Main {
             }
         }
 
-        // TODO LOOP THROUGH EVERY STATE ...
-
-//
-//        double currentSum = beliefState.calculateSummationForOneState("(2,2)", Action.LEFT);
-//        System.out.println("CURRENT = " + currentSum);
         for (int i = 0; i < actions.size(); i++) {
             Action currentAction = actions.get(i);
             int currentObservation = observations.get(i);
@@ -94,41 +128,49 @@ public class Main {
             for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
                 String currKeyXY = entry.getKey(); // the name of the state (e.g., "AA")
                 State currDestState = entry.getValue(); // the details of the state
-                System.out.println("STARTING ****** " + currKeyXY);
+//                System.out.println(" " + currKeyXY);
 
                 double currentSum = beliefState.calculateSummationForOneState(currKeyXY, currentAction);
-
-                // double result =  currentSum;
-                System.out.println("CURRENT = " + currentSum);
 
                 // get walls
                 double probabilityOfEvidence = 1;
 
                 // case for observing terminal state
                 if (currentObservation == 0) {
-                    probabilityOfEvidence = 0.1;
-                } else if (!currDestState.getWalls().contains(Action.TERMINATE)) {
-                    if (currDestState.getWalls().size() == currentObservation) {
-                        probabilityOfEvidence = 0.9;
+                    if (currDestState.getWalls().contains(Action.TERMINATE)) {
+                        probabilityOfEvidence = 1;
                     } else {
-                        probabilityOfEvidence = 0.1;
-                    }
-                } else {
-                    // we are in a terminate state:
-                    if (currDestState.getWalls().size() - 1 == currentObservation) {
-                        probabilityOfEvidence = 0.9;
-                    } else {
-                        probabilityOfEvidence = 0.1;
+                        probabilityOfEvidence = 0;
                     }
                 }
+                // case for NOT observing terminal state
+                else {
+                    if (currKeyXY.equals("(4,3)") || currKeyXY.equals("(4,2)")) {
+                        probabilityOfEvidence = 0;
+                    }
+                    else  {
+                        if (currDestState.getWalls().size() == currentObservation) {
+                            probabilityOfEvidence = 0.9;
+                        } else {
+                            probabilityOfEvidence = 0.1;
+                        }
+                    }
+                }
+//                else {
+//                    // we are in a terminate state:
+//                    if (currDestState.getWalls().size() - 1 == currentObservation) {
+//                        probabilityOfEvidence = 0.9;
+//                    } else {
+//                        probabilityOfEvidence = 0.1;
+//                    }
+//                }
 
                 currentSum = probabilityOfEvidence * currentSum; // still need to apply normalization
                 newValues.put(currKeyXY, currentSum);
             }
 
-            System.out.println(newValues);
-            System.out.println(newValues.size());
-            // todo: sum of all the sums
+//            System.out.println(newValues);
+//            System.out.println(newValues.size());
 
             double summationForNormalization = 0;
 
@@ -139,7 +181,7 @@ public class Main {
                 summationForNormalization += currStateValue;
             }
 
-            System.out.println(summationForNormalization);
+//            System.out.println(summationForNormalization);
 
 
             for (HashMap.Entry<String, Double> entry : newValues.entrySet()) {
@@ -153,7 +195,7 @@ public class Main {
                 beliefState.getBeliefState().get(currKeyXY).setBelief(finalBeliefValue);
 
             }
-            System.out.println("Belief State at step: " + i+1);
+            System.out.println("********* \nBelief State at step: " + (i+1));
             for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
                 State currDestState = entry.getValue(); // the details of the state
                 currDestState.printStateFinal();
@@ -161,12 +203,11 @@ public class Main {
         }
 
         // FINAL OUTPUT printing
-        System.out.println("Final Output:");
-        for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
-            State currDestState = entry.getValue(); // the details of the state
-            currDestState.printStateFinal();
-        }
-        // todo surround ^ in loop to accound for list of action / observations
+//        System.out.println("Final Output:");
+//        for (HashMap.Entry<String, State> entry : beliefState.getBeliefState().entrySet()) {
+//            State currDestState = entry.getValue(); // the details of the state
+//            currDestState.printStateFinal();
+//        }
     }
 
 

@@ -5,7 +5,6 @@ public class State {
     private int y;
     private double belief;
     private ArrayList<Action> walls;
-//    private int numberOfWalls;
 
     public State(int x, int y, double belief, ArrayList<Action> walls) {
         this.x = x;
@@ -30,8 +29,6 @@ public class State {
     public ArrayList<Action> getWalls() {
         return walls;
     }
-
-// TODO something with the number of walls
 
     public void setBelief(double newBelief) {
         this.belief = newBelief;
